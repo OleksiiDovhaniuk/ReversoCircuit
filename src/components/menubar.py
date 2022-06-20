@@ -1,5 +1,5 @@
 """
-Menu Bar
+Menubar
 
 Author: Oleksii Dovhaniuk
 Date: 15.06.2022
@@ -89,9 +89,10 @@ def openAbout():
     pass
 
 
-class MenuBar (tk.Menu):
+class Menubar (tk.Menu):
     def __init__ (self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
+        self.container = container
 
 
         file_menu = tk.Menu(self, tearoff=0)
@@ -119,7 +120,7 @@ class MenuBar (tk.Menu):
 
         view_menu = tk.Menu(self, tearoff=0)
         view_menu.add_command(label='Report', command=openReport, state='disabled', accelerator='Ctrl+Shift+R')
-        view_menu.add_command(label='History', command=openHistory, state='disabled', accelerator='Ctrl+Shift+H')
+        view_menu.add_command(label='Archive', command=openHistory, state='disabled', accelerator='Ctrl+Shift+H')
         view_menu.add_command(label='Entity', command=openEntity, state='disabled', accelerator='Ctrl+Shift+E')
         view_menu.add_command(label='Basis', command=openBasis, state='disabled', accelerator='Ctrl+Shift+B')
         view_menu.add_command(label='Algorithm', command=openAlgorithm, state='disabled', accelerator='Ctrl+Shift+A')
@@ -151,5 +152,5 @@ class MenuBar (tk.Menu):
         self.add_cascade(label='Help', menu=help_menu)
 
 
-
-        container.config(menu=self)
+    def config(self):
+        self.container.config(menu=self)

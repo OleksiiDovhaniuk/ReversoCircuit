@@ -9,7 +9,9 @@ import tkinter as tk
 from tkinter import filedialog
 import ctypes
 
-from src.components.menubar import MenuBar
+from src.components.menubar import Menubar
+from src.components.infobar import Infobar
+from src.components.workspace import Workspace
 
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
@@ -33,19 +35,17 @@ class MainApp ():
     root.geometry('1920x1080')
     root.iconbitmap("src/assets/icons/logo.ico")
     root.title('Reverso Circuit')
-    root.resizable(0, 0)
+    # root.resizable(0, 0)
 
 
 
-    menubar = MenuBar(root)
-    # filemenu = tk.Menu(menubar)
-    # filemenu.add_command(label='Open', command=onOpen)
-    # filemenu.add_command(label='Save', command=onSave)
-    # filemenu.add_command(label='Quit', command=root.quit)
-    # menubar.add_cascade(label='File', menu=filemenu)
+    workspace = Workspace(root)
+    menubar = Menubar(root)
+    infobar = Infobar(root)
 
-    # root.config(menu=menubar)
-
+    menubar.config()
+    workspace.pack(fill='both', expand=1)
+    infobar.pack(fill='both')
 
 
 app = MainApp()
