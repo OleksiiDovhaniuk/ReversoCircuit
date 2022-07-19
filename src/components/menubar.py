@@ -6,7 +6,8 @@ Date: 15.06.2022
 """
 
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, font
+from PIL import Image, ImageTk
 
 def onOpen():
     print(filedialog.askopenfilename(
@@ -89,10 +90,44 @@ def openAbout():
     pass
 
 
+
 class Menubar (tk.Menu):
-    def __init__ (self, container, *args, **kwargs):
+    
+    def zoomIn(self):
+        for font_name in font.names():
+            font_obj = font.nametofont(font_name)
+            font_obj.configure(size=round(font_obj.cget('size')*1.25))
+
+    def zoomOut(self):
+        for font_name in font.names():
+            font_obj = font.nametofont(font_name)
+            font_obj.configure(size=round(font_obj.cget('size')*.8))
+        
+
+    def zoomTo(self, value):
+        for font_name in font.names():
+            font_obj = font.nametofont(font_name)
+            font_obj.configure(size=round(self._default_font_sizes[font_name]*value))
+
+    def zoomToFit(self):
+        pass
+
+    def zoomTo50(self):
+        self.zoomTo(.5)
+
+    def zoomTo100(self):
+        self.zoomTo(1)
+
+    def zoomTo200(self):
+        self.zoomTo(2)
+
+    def __init__ (self, container, height, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.container = container
+        self.height = height
+        self._default_font_sizes = {
+            name: font.nametofont(name).cget('size') for name in font.names()
+        }
 
 
         file_menu = tk.Menu(self, tearoff=0)
@@ -150,6 +185,15 @@ class Menubar (tk.Menu):
         help_menu.add_separator()
         help_menu.add_command(label='About', command=openAbout, state='disabled')
         self.add_cascade(label='Help', menu=help_menu)
+
+        zoom_menu = tk.Menu(self, tearoff=0)
+        zoom_menu.add_command(label='Zoom in', command=self.zoomIn, accelerator='Ctrl++')
+        zoom_menu.add_command(label='Zoom out', command=self.zoomOut, accelerator='Ctrl+-')
+        # zoom_menu.add_command(label='Zoom to fit', command=self.zoomToFit, state='disabled', accelerator='Shift+1')
+        zoom_menu.add_command(label='Zoom to 50%', command=self.zoomTo50)
+        zoom_menu.add_command(label='Zoom to 100%', command=self.zoomTo100, accelerator='Shift+0')
+        zoom_menu.add_command(label='Zoom to 200%', command=self.zoomTo200)
+        self.add_cascade(label='Zoom', compound='right', menu=zoom_menu)
 
 
     def config(self):

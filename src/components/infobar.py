@@ -10,14 +10,12 @@ VERSION = '0.0.0'
 
 class Infobar(tk.Frame):
     bg = 'white'
-    height = 32
-    font_size = 8
+    # font_size = 8
 
-    def __init__ (self, container, *args, **kwargs):
-        super().__init__(container, bg=self.bg, height=self.height, highlightbackground='#E9E9E9', highlightthickness=1.5, *args, **kwargs)
+    def __init__ (self, container, height, *args, **kwargs):
+        super().__init__(container, bg=self.bg, height=height, highlightbackground='#E9E9E9', highlightthickness=1.5, *args, **kwargs)
+        self.height = height
 
-        self.pack_propagate(0)
-
-        version_lbl = tk.Label(self, text=VERSION, bg=self.bg, font=('Arial',self.font_size)) 
+        version_lbl = tk.Label(self, text=VERSION, bg=self.bg) 
         version_lbl.pack(side='right')
         
