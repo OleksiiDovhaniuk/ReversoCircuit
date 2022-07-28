@@ -24,9 +24,11 @@ def openAlgorithm():
     pass
 
 class Window(tk.Frame):
-    menu_height = 52
+    _titles = ('Report', 'Circuit', 'Archive', 'Truth Table', 'Basis', 'Algorithm')
+
+    menu_height = 24
     bg = 'blue'
-    menu_bg = 'black'
+    menu_bg = '#F5F5F5'
     popup_bg = '#002244'
     body_bg = 'yellow'
     title = 'Report'
@@ -34,25 +36,47 @@ class Window(tk.Frame):
 
     def __init__ (self, master, *args, **kwargs):
         super().__init__(master, bg=self.bg, *args, **kwargs)
-        titles = ['Report', 'Circuit', 'Archive', 'Truth Table', 'Basis', 'Algorithm']
 
-        menubar = self.menubar = tk.Frame(self, bg=self.menu_bg, height=self.menu_height, relief='groove')
-        self._windows_dropdown = tk.Frame(self, bg=self.popup_bg)
-        title_var = self.title_var = tk.StringVar(menubar)
-        self.opt = opt = ttk.OptionMenu(menubar, title_var, *titles, command=self.switch_window)
-        opt.config(width=10)
-        opt.grid(row=0, column=0, sticky='wns')
-        
-        
-        menubar.rowconfigure(0, weight=1)
-        body = self.body = tk.Frame(self, bg=self.body_bg, relief='groove')
+        # General menubar initialization and components
+        self.menubar = menubar = tk.Frame(self, bg=self.menu_bg)
+        menubar.pack(fill='x', side='top')
 
+        self.left = left = tk.Frame(menubar)
+        self.left.pack(side='left', fill='both')
+
+        self.title_var = tk.StringVar(left)
+        self.option_menu = ttk.OptionMenu(left, self.title_var, *self._titles, command=self.switch_window)
+        self.option_menu.pack(side='left', fill='both')
+
+        self.right = tk.Frame(menubar)
+        self.right.pack(side='right', fill='both')
+
+        # Body part of the Window initialization and components
+        self.body = body = tk.Frame(self, bg=self.body_bg)
+        body.pack(fill='both', side='bottom', expand=1)
+
+
+
+
+        # menubar = self.menubar = tk.Frame(self, bg=self.menu_bg, height=self.menu_height, relief='groove')
+        # self.spaceholder = tk.Frame(menubar)
+        # self._windows_dropdown = tk.Frame(self, bg=self.popup_bg)
+        # title_var = self.title_var = tk.StringVar(menubar)
+        # self.opt = opt = ttk.OptionMenu(menubar, title_var, *titles, command=self.switch_window)
+        # opt.config(width=10)
+        # opt.grid(row=0, column=0, sticky='wns')
+        # self.spaceholder.grid(row=0, column=1, sticky='wens')
+        # self.spaceholder.rowconfigure(0, weight=1)
+        
+        # body = self.body = tk.Frame(self, bg=self.body_bg, relief='groove')
             
-        menubar.grid(row=0, column=0, sticky='wns')
-        body.grid(row=1, column=0, sticky='wens')
+        # menubar.grid(row=0, column=0, sticky='wns')
+        # body.grid(row=1, column=0, sticky='wens')
+        # menubar.rowconfigure(0, weight=1)
+        # body.rowconfigure(0, weight=1)
+        # body.columnconfigure(0, weight=1)
 
-        self.columnconfigure(0, weight=1)
-
+        # self.columnconfigure(0, weight=1)
 
         
     def openWindowsSelection(self):
@@ -66,13 +90,14 @@ class Window(tk.Frame):
         self.box = box
 
     def switch_window(self, *args):
-        choise = self.title_var.get()
-        fill = self.windows[choise]
-        fill.title_var.set(choise)
-        print(choise)
-        fill.set_box(self.box)
-        fill.box.forget(self)
-        fill.box.add(fill)
+        self.title_var.set(self.title)
+        # choise = self.title_var.get()
+        # fill = self.windows[choise]
+        # fill.title_var.set(choise)
+        # print(choise)
+        # fill.set_box(self.box)
+        # fill.box.forget(self)
+        # fill.box.add(fill)
 
 
 class Circuit(Window):
@@ -83,16 +108,16 @@ class Circuit(Window):
         super().__init__(*args, **kwargs)
         self.title_var.set(self.title)
 
-class Archive(Window):
-    title = 'Archive'
-    bg = '#712F3E'
+# class Archive(Window):
+#     title = 'Archive'
+#     bg = '#712F3E'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, bg=self.bg)
-        self.title_var.set(self.title)
-        self.config(width=500)
-        self.menubar.config(width=500)
-        self.body.config(width=500)
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs, bg=self.bg)
+#         self.title_var.set(self.title)
+#         self.config(width=500)
+#         self.menubar.config(width=500)
+#         self.body.config(width=500)
 
 class TruthTable(Window):
     title = 'TruthTable'

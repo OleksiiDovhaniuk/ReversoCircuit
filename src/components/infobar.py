@@ -6,7 +6,7 @@ Date: 17.06.2022
 """
 import tkinter as tk
 
-VERSION = '0.0.0'
+VERSION = '0.3.0'
 
 class Infobar(tk.Frame):
     bg = 'white'

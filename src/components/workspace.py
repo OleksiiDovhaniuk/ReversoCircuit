@@ -8,13 +8,14 @@ Date: 17.06.2022
 """
 
 import tkinter as tk
-from src.components.windows.window import Circuit, Archive, TruthTable, Algorithm
+from src.components.windows.window import Circuit, TruthTable, Algorithm, Window
 from src.components.windows.basis import Basis
 from src.components.windows.archive import Archive
 
 
 class Workspace(tk.PanedWindow):
     _sashwidth = 4
+    _cat = [.15, .5, .75]
     
     def __init__ (self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
@@ -23,26 +24,30 @@ class Workspace(tk.PanedWindow):
         top_right = Archive(right)
         bottom_right = Basis(right)
         self.left = left = tk.PanedWindow(self, sashrelief='raised', sashwidth=self._sashwidth, orient='vertical')
-        top_left = TruthTable(left)
-        top_left.body.config(width=1600)
-        bottom_left = Circuit(left)
+        top_left = Window(left)
+        bottom_left = Window(left)
+
+        win_width = master.winfo_width()
+        win_height = master.winfo_height()
+
+        top_right.body.config(width=win_width*self._cat[0], height=win_height*self._cat[1])
+        bottom_right.body.config(width=win_width*self._cat[0], height=win_height*(1-self._cat[1]))
+        top_left.body.config(width=win_width*(1-self._cat[0]), height=win_height*self._cat[2])
+        bottom_left.body.config(width=win_width*(1-self._cat[0]), height=win_height*(1-self._cat[2]))
 
         top_right.config()
         bottom_right.config()
 
 
-        self.add(left)
-        self.add(right)
-        right.add(top_right)
-        right.add(bottom_right)
-        right.sash_place(0, 1000, 1)
-        left.add(top_left)
-        left.add(bottom_left)
+        self.add(left, stretch="always")
+        self.add(right,stretch="always")
+        right.add(top_right, stretch="always")
+        right.add(bottom_right, stretch="always")
+        left.add(top_left, stretch="always")
+        left.add(bottom_left, stretch="always")
 
 
         # master.bind("<Configure>", self.resize)
-
-
 
         # windows = self.windows ={
         #     'Report': Report(self, height=height, width=self.width*.5),
