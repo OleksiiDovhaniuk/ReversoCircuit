@@ -21,8 +21,8 @@ class Workspace(tk.PanedWindow):
         super().__init__(master, *args, **kwargs)
 
         self.right = right = tk.PanedWindow(self, sashrelief='raised', sashwidth=self._sashwidth, orient='vertical')
-        top_right = Archive(right)
-        bottom_right = Basis(right)
+        self.archive = top_right = Archive(right)
+        self.basis = bottom_right = Basis(right)
         self.left = left = tk.PanedWindow(self, sashrelief='raised', sashwidth=self._sashwidth, orient='vertical')
         top_left = Window(left)
         bottom_left = Window(left)

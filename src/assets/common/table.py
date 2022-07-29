@@ -56,22 +56,22 @@ class Row(tk.Frame):
         self.placeholder.destroy()
 
 class Table(tk.Frame):
-    _rows = []
-    _row_no = 32
+    row_no = 32
 
     top = 0
     bg = 'white'
     bg_odd = '#F0F0F0'
 
-    def __init__(self, master, bg=bg, bg_odd=bg_odd, *args, **kwargs):
+    def __init__(self, master, row_no=row_no, bg=bg, bg_odd=bg_odd, *args, **kwargs):
         super().__init__(master, bg=bg, *args, **kwargs)
+        self._rows = []
         self.bg = bg
         self.bg_odd = bg_odd
 
         self.scrollable_frame = ScrollableFrame(self)
         self.box = box = self.scrollable_frame.scrollable_frame
 
-        for i in range(self._row_no):
+        for i in range(self.row_no):
             if i % 2:
                 row = Row(box, bg=bg)
             else:
@@ -89,6 +89,7 @@ class Table(tk.Frame):
         return row
 
     def getRow(self, index):
+        print(f'[getRow]: {self} <<<{self._rows[index]}>>>')
         return self._rows[index]
 
 

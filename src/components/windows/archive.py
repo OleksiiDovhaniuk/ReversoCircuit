@@ -34,8 +34,6 @@ class Collection(tk.Frame):
                 self.expand_btn.config(text='-')
                 self.is_expand = True
 
-            # print('[WARNING][Collection obj Initialization]: There is a None on_expan() function transmited to this Collection')
-
         def __init__ (self, master, expand=is_expand, title=title, done=jobs_done, total=jobs_total, bg='gray', onExpand=onExpand, onCollapse=onCollapse, *args, **kwargs):
             super().__init__(master, bg=bg, relief='flat', *args, **kwargs)
             self.is_expand = expand
@@ -54,6 +52,8 @@ class Collection(tk.Frame):
             self.expand_btn.pack(side='left', fill='both')
             self.title_lbl.pack(side='left', fill='both')
             self.jobs_lbl.pack(side='right', fill='both')
+
+            print(f'[Added]: {self}')
 
             # print(f'New Collection added to row {index}')
 
@@ -85,6 +85,8 @@ class SavePoint(tk.Frame):
         self.datetime_lbl.pack(side='left', fill='both')
         self.state_lbl.pack(side='right', fill='both')
         self.progress_lbl.pack(side='right', fill='both')
+
+        print(f'[Added]: {self}')
 
 
 class Archive(Window):
@@ -239,8 +241,8 @@ class Archive(Window):
         print(f'Collection in Row #{dynamic_index} Is Collapced')
 
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, master, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
         self.title_var.set(self.title)
         self.table = table = Table(self.body, bg_odd=self.bg_odd)
         self.load_btn = tk.Button(self.right, text='Load', command=self.loadSaving)
