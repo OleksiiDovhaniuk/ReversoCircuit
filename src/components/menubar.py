@@ -10,6 +10,11 @@ from tkinter import filedialog, font
 from PIL import Image, ImageTk
 
 def onOpen():
+    """Opens filedialoge window imported from the tkinter package in order to navigate and open a file.
+    Because app data is going to be saved in json files, the filedialog will show only 
+    .json files. 
+    TODO: actually load file data.
+    """
     print(filedialog.askopenfilename(
         initialdir = '/',
         title = 'Open file',
@@ -17,6 +22,11 @@ def onOpen():
     ))
     
 def onSave():
+    """ Opens filedialoge window imported from the tkinter package in order to navigate and save a file.
+    Because app data is going to be saved in json files, the filedialog will show only 
+    .json files. 
+    TODO: actually save data to a file.
+    """
     print(filedialog.asksaveasfilename(
         initialdir = '/',
         title = 'Save as',
@@ -24,106 +34,219 @@ def onSave():
     ))
 
 def onAutoSave():
+    """ Activates or deactivates auto save of the job.
+    TODO: the method itself
+    """
     pass
 
 def onPreferences():
+    """ Opens preferences window.
+    TODO: the method itself
+    """
     pass
 
 def onUndo():
+    """ Undo the last change, if possible.
+    TODO: the method itself
+    """
     pass
 
 def onRedo():
+    """ Redo the last change, if possible.
+    TODO: the method itself
+    """
     pass
 
 def onCut():
+    """ Cuts out selected text, if possible.
+    TODO: the method itself
+    """
     pass
 
 def onCopy():
+    """ Copies out selected text.
+    TODO: the method itself
+    """
     pass
 
 def onPaste():
+    """ Insertes copied or cut text into a focused entry.
+    TODO: the method itself
+    """
     pass
 
 def openReport():
+    """ Opens Report window, if still is not open one.
+    TODO: the method itself
+    """
     pass
 
-def openHistory():
+def openArchive():
+    """ Opens Archive window, if still is not open one.
+    TODO: the method itself
+    """
     pass
 
-def openEntity():
+def openCircuit():
+    """ Opens Circuit window, if still is not open one.
+    TODO: the method itself
+    """
     pass
 
 def openBasis():
+    """ Opens Basis window, if still is not open one.
+    TODO: the method itself
+    """
     pass
 
 def openAlgorithm():
+    """ Opens Algorithm window, if still is not open one.
+    TODO: the method itself
+    """
+    pass
+
+def openTruthTable():
+    """ Opens Truth Table window, if still is not open one.
+    TODO: the method itself
+    """
     pass
 
 def doFullScreen():
+    """ Maximizes the program to a full screen.
+    TODO: the method itself
+    """
     pass
 
 def onFind():
+    """ Pops the find menu.
+    TODO: the method itself
+    """
     pass
 
 def doNothing():
+    """ Does as it seys.
+    """
     pass
 
 def startAlgorithm():
+    """ Starts the job.
+    TODO: the method itself
+    """
     pass
 
 def pauseAlgorithm():
+    """ Pauses the job.
+    TODO: the method itself
+    """
     pass
 
 def continueAlgorithm():
+    """ Continue the paused job.
+    TODO: the method itself
+    """
     pass
 
 def stopAlgorithm():
+    """ Stops the job.
+    TODO: the method itself
+    """
     pass
 
 def openGetStarted():
+    """ Pops Get Started window up.
+    TODO: the method itself
+    """
     pass
 
 def openDocumentation():
+    """ Opens link in the default browser to program documentation.
+    TODO: the method itself
+    """
     pass
 
 def openAbout():
+    """ Pops About Us window up.
+    TODO: the method itself
+    """
     pass
 
 
 
 class Menubar (tk.Menu):
+    """ Menubar of the program. Inherited from Tkinter Menu. Consists of numerouse submenues to 
+    manage the program.
+
+    Parameters
+    ----------
+    master : MainApp
+    height : int
+        Height of the menubar.
+
+    Methods
+    -------
+    config() : returns None
+        Configs the menubar to the master.
+    zoomIn() : returns None
+        Magnifies displayed items.
+    zoomOut() : returns None
+        Reduces sizes of displayed items.
+    zoomTo(value) : returns None
+        Zooms to particular size of displayed items.
+    zoomTo50() : returns None
+        Reduces size of displayed items to 50% from default values.
+    zoomTo100() : returns None
+        Restores size of displayed items to 100%.
+    zoomTo200() : returns None
+        Magnifies displayed items in two times.
+    """
     
     def zoomIn(self):
+        """ Magnifies displayed items
+        """
         for font_name in font.names():
             font_obj = font.nametofont(font_name)
             font_obj.configure(size=round(font_obj.cget('size')*1.25))
 
     def zoomOut(self):
+        """ Reduces sizes of displayed items.
+        """
         for font_name in font.names():
             font_obj = font.nametofont(font_name)
             font_obj.configure(size=round(font_obj.cget('size')*.8))
         
 
     def zoomTo(self, value):
+        """ Zooms to particular size of displayed items.
+        """
         for font_name in font.names():
             font_obj = font.nametofont(font_name)
             font_obj.configure(size=round(self._default_font_sizes[font_name]*value))
 
     def zoomToFit(self):
+        """ Zoom to fit all blocks in Algorithm window.
+        TODO: the method itself
+        """
         pass
 
     def zoomTo50(self):
+        """ Reduces size of displayed items to 50% from default values.
+        """
         self.zoomTo(.5)
 
     def zoomTo100(self):
+        """ Restores size of displayed items to 100%.
+        """
         self.zoomTo(1)
 
     def zoomTo200(self):
+        """ Magnifies displayed items in two times.
+        """
         self.zoomTo(2)
 
-    def __init__ (self, container, height, *args, **kwargs):
-        super().__init__(container, *args, **kwargs)
-        self.container = container
+    def __init__ (self, master, height, *args, **kwargs):
+        """ Sets up properties of the class. Initializes, configures and add menues and submenues of the menubar."""
+        super().__init__(master, *args, **kwargs)
+        self.master = master
         self.height = height
         self._default_font_sizes = {
             name: font.nametofont(name).cget('size') for name in font.names()
@@ -139,7 +262,7 @@ class Menubar (tk.Menu):
         file_menu.add_command(label='Preferences', command=onPreferences, state='disabled')
         file_menu.add_separator()
 
-        file_menu.add_command(label='Quit', command=container.quit)
+        file_menu.add_command(label='Quit', command=master.quit)
         self.add_cascade(label='File', menu=file_menu)
 
         edit_menu = tk.Menu(self, tearoff=0)
@@ -155,8 +278,9 @@ class Menubar (tk.Menu):
 
         view_menu = tk.Menu(self, tearoff=0)
         view_menu.add_command(label='Report', command=openReport, state='disabled', accelerator='Ctrl+Shift+R')
-        view_menu.add_command(label='Archive', command=openHistory, state='disabled', accelerator='Ctrl+Shift+H')
-        view_menu.add_command(label='Entity', command=openEntity, state='disabled', accelerator='Ctrl+Shift+E')
+        view_menu.add_command(label='Archive', command=openArchive, state='disabled', accelerator='Ctrl+Shift+H')
+        view_menu.add_command(label='Circuit', command=openCircuit, state='disabled', accelerator='Ctrl+Shift+C')
+        view_menu.add_command(label='Truth Table', command=openTruthTable, state='disabled', accelerator='Ctrl+Shift+T')
         view_menu.add_command(label='Basis', command=openBasis, state='disabled', accelerator='Ctrl+Shift+B')
         view_menu.add_command(label='Algorithm', command=openAlgorithm, state='disabled', accelerator='Ctrl+Shift+A')
         view_menu.add_separator()
@@ -197,4 +321,5 @@ class Menubar (tk.Menu):
 
 
     def config(self):
-        self.container.config(menu=self)
+        """ Sets up the master of the menubar as a menu."""
+        self.master.config(menu=self)

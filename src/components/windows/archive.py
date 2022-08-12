@@ -12,50 +12,6 @@ import time
 from src.components.windows.window import Window
 from src.assets.common.table import Table
 
-class Collection(tk.Frame):
-        is_expand = False
-        title = 'Untitled Collection'
-        jobs_done = 0
-        jobs_total = 1
-        onExpand = lambda: print('[WARNING][Collection obj Initialization]: There is a None onExpand() function transmited to this Collection')
-        onCollapse = lambda: print('[WARNING][Collection obj Initialization]: There is a None onCollapse() function transmited to this Collection')
-
-        # """
-        # An empty method, to show that the on_expand function was not 
-        # given as an argument during initialization of this Collection.
-        # """
-        def onAction(self):
-            if self.is_expand:
-                self.onCollapse()
-                self.expand_btn.config(text='+')
-                self.is_expand = False
-            else:
-                self.onExpand()
-                self.expand_btn.config(text='-')
-                self.is_expand = True
-
-        def __init__ (self, master, expand=is_expand, title=title, done=jobs_done, total=jobs_total, bg='gray', onExpand=onExpand, onCollapse=onCollapse, *args, **kwargs):
-            super().__init__(master, bg=bg, relief='flat', *args, **kwargs)
-            self.is_expand = expand
-            self.title = title
-            self.jobs_done = done
-            self.jobs_total = total
-            self.onExpand = onExpand
-            self.onCollapse = onCollapse
-
-            self.expand_btn = tk.Button(self, bg=bg, text='+', relief='flat', command=self.onAction)
-            if expand:
-                self.expand_btn.config(text='-')
-            self.title_lbl = tk.Label(self, bg=bg, text=title)
-            self.jobs_lbl = tk.Label(self, bg=bg, text=f'{done}/{total}')
-
-            self.expand_btn.pack(side='left', fill='both')
-            self.title_lbl.pack(side='left', fill='both')
-            self.jobs_lbl.pack(side='right', fill='both')
-
-            print(f'[Added]: {self}')
-
-            # print(f'New Collection added to row {index}')
 
 class SavePoint(tk.Frame):
     _states = ('Panding', 'Initialization', 'Synthesis', 'Optimization')
@@ -64,7 +20,7 @@ class SavePoint(tk.Frame):
     state = 'Panding'
     bg = 'black'
 
-    def __init__ (self, master, datetime=None, progress=progress, state=state, bg=bg, *args, **kwargs):
+    def __init__ (self, master, selection, datetime=None, progress=progress, state=state, bg=bg, *args, **kwargs):
         super().__init__(master, bg=bg, *args, **kwargs)
         if datetime:
             self.datetime = datetime
@@ -77,19 +33,44 @@ class SavePoint(tk.Frame):
             print(f'[WARNING][SavePoint obj Initialization]: There is no state {state}')
 
         self.wpad = tk.Button(self, text=' ', bg=bg, relief='flat', state='disabled')
-        self.datetime_lbl = tk.Label(self, text=self.datetime, bg=bg)
+        self.datetime_btn = tk.Radiobutton(self, text=self.datetime, variable=selection, value=str(self), indicator=0, bg=bg)
         self.progress_lbl = tk.Label(self, text=f'{progress}%', bg=bg)
         self.state_lbl = tk.Label(self, text=self.state[0], bg=bg)
 
         self.wpad.pack(side='left', fill='both')
-        self.datetime_lbl.pack(side='left', fill='both')
+        self.datetime_btn.pack(side='left', fill='x')
         self.state_lbl.pack(side='right', fill='both')
         self.progress_lbl.pack(side='right', fill='both')
 
-        print(f'[Added]: {self}')
 
+class Collection(tk.Frame):
+        is_expand = False
+        title = 'Untitled Collection'
+        jobs_done = 0
+        jobs_total = 1
+        onRefresh = lambda: print('[WARNING][Collection obj Initialization]: There is a None onRefresh() function transmited to this Collection')
+
+        def __init__ (self, master, expand=is_expand, title=title, done=jobs_done, total=jobs_total, bg='gray', onRefresh=onRefresh, *args, **kwargs):
+            super().__init__(master, bg=bg, relief='flat', *args, **kwargs)
+            self.is_expand = expand
+            self.title = title
+            self.jobs_done = done
+            self.jobs_total = total
+            self.onRefresh = onRefresh
+
+            self.expand_btn = tk.Button(self, bg=bg, text='+', relief='flat', command=self.onRefresh)
+            if expand:
+                self.expand_btn.config(text='-')
+            self.title_lbl = tk.Label(self, bg=bg, text=title)
+            self.jobs_lbl = tk.Label(self, bg=bg, text=f'{done}/{total}')
+
+            self.expand_btn.pack(side='left', fill='both')
+            self.title_lbl.pack(side='left', fill='both')
+            self.jobs_lbl.pack(side='right', fill='both')
 
 class Archive(Window):
+    """ The class represents a window with table of a saved jobs. Inherited from a Window class.
+    """
     title = 'Archive'
     bg = '#FFFFFF'
     bg_odd = '#E8EEF2'
@@ -167,104 +148,88 @@ class Archive(Window):
     def addSaving(self):
         print('Add a Saving')
 
-    "Deletes all rows' data after row with inputed index"
-    def deleteAfter(self, index):
-        
-        index += 1
-        for row in self.data[index:]:
-            # print(row)
-            row.destroy()
-            self.data.remove(row)
-
-        print(f'After Delete: {len(self.data)}')
-
-    def addCollection(self, collection, static_index, dynamic_index):
-        new_collection = Collection(
-                master=self.table.getRow(dynamic_index), 
-                expand=collection['expand'], 
-                title=collection['title'], 
-                done=len([item for item in collection['saves'] if item['progress']==100]),
-                total=len(collection['saves']),
-                onExpand=lambda s=static_index, d=dynamic_index: self.openCollection(s, d),
-                onCollapse=lambda s=static_index, d=dynamic_index: self.closeCollection(s, d),
-                bg=self.table.getBg(dynamic_index),
-                )
-        new_collection.master.clear()
-        new_collection.pack(side='bottom', fill='x')
-        self.data.append(new_collection)
-
-        return new_collection
-
-    def addSavePoint(self, save_point, dynamic_index):
+    """
+    Adds Save Point data to the table.
+    args: 
+        save_point - Save Point date from the ;
+    """
+    def addSavePoint(self, save_point):
+        djndex = len(self.data) # local dynamic index
         new_save_point = SavePoint(
-                        master=self.table.getRow(dynamic_index),
+                        master=self.table.addRow(djndex),
                         datetime=save_point['datetime'],
                         progress=save_point['progress'], 
                         state=save_point['state'], 
-                        bg=self.table.getBg(dynamic_index),
+                        # is_selected=False,
+                        selection=self.selected,
+                        bg=self.table.getBg(djndex),
                     )
         new_save_point.master.clear()
         new_save_point.pack(side='bottom', fill='x')
         self.data.append(new_save_point)
 
-    "Expends hiden rows with save points under the current collections"
-    def openCollection(self, static_index, dynamic_index=None):
-        if dynamic_index == None:
-            dynamic_index = static_index
-        self.deleteAfter(dynamic_index)
-        self._data[static_index]['expand'] = True
+    """
+    Adds Collection data to the table.
+    args: 
+        collection - Collection;
+        index - familty index to add from the self._data nested list;
+    """
+    def addCollection(self, collection, index):
+        dindex = len(self.data) # dynamic index
+        new_collection = Collection(
+            master=self.table.addRow(dindex), 
+            expand=collection['expand'], 
+            title=collection['title'], 
+            done=len([item for item in collection['saves'] if item['progress']==100]),
+            total=len(collection['saves']),
+            onRefresh=lambda i=index, d=dindex: self.onRefresh(i, d),
+            # is_selected = False,
+            bg=self.table.getBg(dindex),
+            )
 
-        for save_point in self._data[static_index]['saves']:
-            self.addSavePoint(save_point, len(self.data))
+        new_collection.master.clear()
+        new_collection.pack(side='bottom', fill='x')
+        self.data.append(new_collection)
 
-        for i, collection in enumerate(self._data[static_index+1:]):
-            new_collection = self.addCollection(collection, static_index+i+1, len(self.data))
-            if new_collection.is_expand:
-                for save_point in collection['saves']:
-                    self.addSavePoint(save_point, len(self.data))
-                
-        print(f'Collection in Row #{dynamic_index} Is Opened')
+        if collection['expand']:
+            for save_points in collection['saves']:
+                self.addSavePoint(save_points)
 
-    "Hides rows with save points under the current collections"
-    def closeCollection(self, static_index, dynamic_index=None):
-        if dynamic_index == None:
-            dynamic_index = static_index
-        self.deleteAfter(dynamic_index)
-        self._data[static_index]['expand'] = False
+    """
+    Refreshes the table 
+    args: 
+        index - familty index to add from the self._data nested list;
+        jndex - gate index within a family to add from the self._data nested list;
+        dndex - row index where to input this data. 
+    """
+    def onRefresh(self, index=0, dindex=None):
+        if dindex == None: dindex = index
+        self._data[index]['expand'] = not self.data[dindex].is_expand
 
-        for i, collection in enumerate(self._data[static_index+1:]):
-            new_collection = self.addCollection(collection, static_index+i+1, len(self.data))
-            if new_collection.is_expand:
-                for save_point in collection['saves']:
-                    self.addSavePoint(save_point, len(self.data))
+        # # Delete rows's data
+        for row in self.data[dindex:]:
+            self.data.remove(row)
+            self.table.deleteRow(row.master)
 
-        print(f'Collection in Row #{dynamic_index} Is Collapced')
+        # Restore row's data
+        for i, collection in enumerate(self._data[index:]):
+            self.addCollection(collection, index+i)
 
 
     def __init__(self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.title_var.set(self.title)
-        self.table = table = Table(self.body, bg_odd=self.bg_odd)
+        self.table = Table(self.body, bg_odd=self.bg_odd)
         self.load_btn = tk.Button(self.right, text='Load', command=self.loadSaving)
         self.add_btn = tk.Button(self.right, text='Add', command=self.addSaving)
-        self.data = [
-            Collection(
-                master=table.getTop(), 
-                expand=collection['expand'], 
-                title=collection['title'], 
-                done=len([item for item in collection['saves'] if item['progress']==100]),
-                total=len(collection['saves']),
-                onExpand=lambda i=index: self.openCollection(i),
-                onCollapse=lambda i=index: self.closeCollection(i),
-                bg=table.getBg(),
-                )
-            for index, collection in enumerate(self._data)
-            ]
-        # print(f'Initialize: {len(self.data)}')
+        self.selected = tk.StringVar(self, 0)
+
+        for index, collection in enumerate(self._data):
+            self.addCollection(collection, index)
+        
         self.table.pack(fill='both', expand=1)
         self.load_btn.pack(side='left', fill='both')
         self.add_btn.pack(side='right', fill='both')
         for row in self.data:
             row.master.clear()
             row.pack(side='top', fill='x')
-

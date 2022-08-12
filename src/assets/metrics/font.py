@@ -1,3 +1,10 @@
+"""
+The file contains font settings.
+
+Author: Oleksii Dovhaniuk
+Date: 15.07.2022
+"""
+
 from tkinter import font
 
 _default_font_sizes = {

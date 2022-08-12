@@ -1,5 +1,6 @@
 """
-Reverso Circuit Lounching File
+Reverso Circuit Lounching File. 
+This file contains the core of the app.
 
 Author: Oleksii Dovhaniuk
 Date: 14.06.2022
@@ -17,6 +18,10 @@ from src.components.workspace import Workspace
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 def onOpen():
+    """Opens filedialoge window imported from the tkinter package in order to navigate and open a file.
+    Because app data is going to be saved in json files, the filedialog will show only 
+    .json files. 
+    """
     print(filedialog.askopenfilename(
         initialdir = '/',
         title = 'Open file',
@@ -24,6 +29,10 @@ def onOpen():
     ))
     
 def onSave():
+    """Opens filedialoge window imported from the tkinter package in order to navigate and save a file.
+    Because app data is going to be saved in json files, the filedialog will show only 
+    .json files. 
+    """
     print(filedialog.asksaveasfilename(
         initialdir = '/',
         title = 'Save as',
@@ -32,6 +41,14 @@ def onSave():
 
 
 class MainApp:
+    """The main class of the project.
+    
+    Attributes
+    ----------
+    _zoom : int
+        integer value to manipulate magnitude of objects in the application.
+
+    """
 
     def __init__(self, master: tk.Tk) -> None:
         self._zoom = _zoom = tk.IntVar(root, 1)

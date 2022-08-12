@@ -8,22 +8,57 @@ Date: 17.06.2022
 import tkinter as tk
 from tkinter import ttk
 
-def openReport():
-    pass
+# def openReport():
+#     pass
 
-def openHistory():
-    pass
+# def openHistory():
+#     pass
 
-def openEntity():
-    pass
+# def openEntity():
+#     pass
 
-def openBasis():
-    pass
+# def openBasis():
+#     pass
 
-def openAlgorithm():
-    pass
+# def openAlgorithm():
+#     pass
 
 class Window(tk.Frame):
+    """ A window for specified workflow. It is inherited from Tkinter Frame. It is a parent class for:
+    windows.report.Report, 
+    windows.circuit.Circuit, 
+    windows.archive.Archive, 
+    windows.truthTable.TruthTable, 
+    windows.basis.Basis, 
+    windows.algorithm.Algorithm.
+
+    Constants
+    ---------
+    _titles : tuple
+        A tuple of all windows titles (tuples of str). 
+
+    Properties
+    ----------
+    title : str (default -> 'Report')
+        A title of the window.
+    bg : str
+        Background color of the whole window.
+    menubar : Tkinter Frame
+        A local menubar.
+    menu_bg : str
+        Background color of window's menubar.
+    popup_bg : str
+        Background color of a drop down menu.
+    menu_height : int
+        Height of the window's menubar.
+    body : Tkinter Frame
+        A bulk part of the window.
+
+    Methods
+    -------
+    switch_window : returns None
+        Switches the current window to one from the _titles.
+    """
     _titles = ('Report', 'Circuit', 'Archive', 'Truth Table', 'Basis', 'Algorithm')
 
     menu_height = 24
@@ -35,6 +70,8 @@ class Window(tk.Frame):
 
 
     def __init__ (self, master, *args, **kwargs):
+        """ Initializes, configs and packs menubar and body of the window.
+        """
         super().__init__(master, bg=self.bg, *args, **kwargs)
 
         # General menubar initialization and components
@@ -56,40 +93,9 @@ class Window(tk.Frame):
         body.pack(fill='both', side='bottom', expand=1)
 
 
-
-
-        # menubar = self.menubar = tk.Frame(self, bg=self.menu_bg, height=self.menu_height, relief='groove')
-        # self.spaceholder = tk.Frame(menubar)
-        # self._windows_dropdown = tk.Frame(self, bg=self.popup_bg)
-        # title_var = self.title_var = tk.StringVar(menubar)
-        # self.opt = opt = ttk.OptionMenu(menubar, title_var, *titles, command=self.switch_window)
-        # opt.config(width=10)
-        # opt.grid(row=0, column=0, sticky='wns')
-        # self.spaceholder.grid(row=0, column=1, sticky='wens')
-        # self.spaceholder.rowconfigure(0, weight=1)
-        
-        # body = self.body = tk.Frame(self, bg=self.body_bg, relief='groove')
-            
-        # menubar.grid(row=0, column=0, sticky='wns')
-        # body.grid(row=1, column=0, sticky='wens')
-        # menubar.rowconfigure(0, weight=1)
-        # body.rowconfigure(0, weight=1)
-        # body.columnconfigure(0, weight=1)
-
-        # self.columnconfigure(0, weight=1)
-
-        
-    def openWindowsSelection(self):
-        self._windows_dropdown.place(y=self.menu_height, relx=0)
-        print('NaN button clicked!')
-
-    def setup(self, windows):
-        self.windows = windows
-
-    def set_box(self, box):
-        self.box = box
-
     def switch_window(self, *args):
+        """ Switches the current window to one from the _titles.
+        """
         self.title_var.set(self.title)
         # choise = self.title_var.get()
         # fill = self.windows[choise]
@@ -101,6 +107,8 @@ class Window(tk.Frame):
 
 
 class Circuit(Window):
+    """ The class represents a window for creating, editing and reviewing a circuits. Inherited from a Window class.
+    """
     # bg ='#003636'
     title = 'Circuit'
 
@@ -108,26 +116,10 @@ class Circuit(Window):
         super().__init__(*args, **kwargs)
         self.title_var.set(self.title)
 
-# class Archive(Window):
-#     title = 'Archive'
-#     bg = '#712F3E'
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs, bg=self.bg)
-#         self.title_var.set(self.title)
-#         self.config(width=500)
-#         self.menubar.config(width=500)
-#         self.body.config(width=500)
-
-class TruthTable(Window):
-    title = 'TruthTable'
-    # bg = '#33bbff'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.title_var.set(self.title)
 
 class Algorithm(Window):
+    """ The class represents a window for creating, editing and reviewing an algorithm. Inherited from a Window class.
+    """
     title = 'Algorithm'
     # bg = '#bd80ff'
 
