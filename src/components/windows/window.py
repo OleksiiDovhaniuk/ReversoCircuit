@@ -106,17 +106,6 @@ class Window(tk.Frame):
         # fill.box.add(fill)
 
 
-class Circuit(Window):
-    """ The class represents a window for creating, editing and reviewing a circuits. Inherited from a Window class.
-    """
-    # bg ='#003636'
-    title = 'Circuit'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.title_var.set(self.title)
-
-
 class Algorithm(Window):
     """ The class represents a window for creating, editing and reviewing an algorithm. Inherited from a Window class.
     """

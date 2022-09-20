@@ -1,5 +1,5 @@
 """
-Basis windows.
+Basis window.
 
 Author: Oleksii Dovhaniuk
 Date: 21.06.2022

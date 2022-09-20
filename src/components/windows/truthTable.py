@@ -289,7 +289,7 @@ class TruthTable(Window):
     _line_no : int
         Number of input or output signals.
     """
-    TITLE = 'TruthTable'
+    title = 'TruthTable'
 
     _line_no = 3
     _data = {
@@ -307,7 +307,7 @@ class TruthTable(Window):
 
     def __init__(self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
-        self._title = tk.StringVar(self.body, self.TITLE)
+        self.title_var.set(self.title)
         self._table = table = ScrollableFrameXY(self.body)
 
         self._addBtn = tk.Button(self.left, text='Add line', command=self.addLine)

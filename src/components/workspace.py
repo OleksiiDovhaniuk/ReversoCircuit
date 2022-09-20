@@ -8,10 +8,12 @@ Date: 17.06.2022
 """
 
 import tkinter as tk
-from src.components.windows.window import Circuit, Algorithm, Window
+from src.components.windows.window import Algorithm, Window
 from src.components.windows.basis import Basis
 from src.components.windows.archive import Archive
 from src.components.windows.truthTable import TruthTable
+from src.components.windows.circuit import Circuit
+
 
 
 class Workspace(tk.PanedWindow):
@@ -54,7 +56,7 @@ class Workspace(tk.PanedWindow):
         self.basis = bottom_right = Basis(right)
         self.left = left = tk.PanedWindow(self, sashrelief='raised', sashwidth=self._sashwidth, orient='vertical')
         self.truth_table = top_left = TruthTable(left)
-        bottom_left = Window(left)
+        self.circuit = bottom_left = Circuit(left)
 
         win_width = master.winfo_width()
         win_height = master.winfo_height()
